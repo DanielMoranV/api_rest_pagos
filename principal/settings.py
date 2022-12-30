@@ -43,8 +43,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
     'users',
-    'pagos',
-
+    
     'todos',
     'corsheaders',
     'drf_yasg',

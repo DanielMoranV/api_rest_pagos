@@ -1,16 +1,27 @@
 from django.contrib.auth import authenticate
-from django.shortcuts import render
+from rest_framework import status
+from rest_framework.generics import GenericAPIView
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+from .models import User
+from django.contrib.auth import authenticate
 from rest_framework import generics, status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from .serializers import SignUpSerializer, GetUserSerializer
 from .tokens import create_jwt_pair_for_user
 from rest_framework import viewsets
-from .models import User
-from django.shortcuts import redirect
-# Create your views here.
+
+
+
+class Logout(GenericAPIView):
+    def post(self, request, *args, **kwargs):
+        user = User.objects.filter(id=request.data.get('user', 0))
+        if user.exists():
+            RefreshToken.for_user(user.first())
+            return Response({'message': 'Sesión cerrada correctamente.'}, status=status.HTTP_200_OK)
+        return Response({'error': 'No existe este usuario.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SignUpView(generics.GenericAPIView):
@@ -32,7 +43,7 @@ class SignUpView(generics.GenericAPIView):
 
 
 class LoginView(APIView):
-
+  
     def post(self, request: Request):
         email = request.data.get("email")
         password = request.data.get("password")
