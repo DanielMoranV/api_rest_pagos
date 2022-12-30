@@ -1,4 +1,3 @@
-from .views import GetUsers
 from rest_framework import routers
 from django.urls import path
 from rest_framework_simplejwt.views import (
@@ -10,12 +9,11 @@ from rest_framework_simplejwt.views import (
 from . import views
 
 router = routers.DefaultRouter()
-router.register('api/v1/users', GetUsers, 'list_users')
+router.register('', views.GetUsers)
 
 urlpatterns = [
     path("signup/", views.SignUpView.as_view(), name="signup"),
     path("login/", views.LoginView.as_view(), name="login"),
-    path("logout/",views.Logout.as_view(), name="logout"),
     path("jwt/create/", TokenObtainPairView.as_view(), name="jwt_create"),
     path("jwt/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("jwt/verify/", TokenVerifyView.as_view(), name="token_verify"),
